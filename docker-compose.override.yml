@@ -1,0 +1,46 @@
+services:
+  api:
+    container_name: petcare_api_dev
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "${PORT}:3500"
+    depends_on:
+      postgresdb:
+        condition: service_healthy
+    networks:
+      - backend_net
+    volumes:
+      - .:/app
+      - /app/node_modules
+
+  postgresdb:
+    image: postgres:16
+    container_name: petcare_db_dev
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=petcare_user
+      - POSTGRES_PASSWORD=petpassdb
+      - POSTGRES_DB=petcare_db
+    ports:
+      - "5433:5432"
+    networks:
+      - backend_net
+    volumes:
+      - db_data_dev:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U petcare_user -d petcare_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+networks:
+  backend_net:
+    driver: bridge
+
+volumes:
+  db_data_dev:

@@ -1,0 +1,28 @@
+# Dependencies
+node_modules
+dist
+coverage
+.eslintcache
+
+# Environment variables
+.env
+.env.*
+
+# Git
+.git
+.gitignore
+
+# SO / IDE
+.DS_Store
+Thumbs.db
+.idea
+.vscode
+
+# Documentation
+README.md
+README-DOCKER.md
+
+# Others
+*.log
+npm-debug.log*
+yarn-error.log*
